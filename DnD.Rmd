@@ -12,7 +12,7 @@ library(httr)
 library(jsonlite)
 library(tidyverse)
 library(scales)
-library(lubridate)
+
 
 
 my_url <- paste0("https://www.dnd5eapi.co/api/classes/barbarian")
@@ -96,6 +96,34 @@ glimpse(mari_json)
 
 
 mari_json$damage_resistances
+
+```
+
+#Spells----------------------------------------------------------------------
+
+
+```{r}
+dnd_base <- "https://www.dnd5eapi.co/api/spells/"
+
+fetch_spells <- function(spells) {
+  dnd_url <- "https://www.dnd5eapi.co/api/spells/"
+  
+  ret <- fromJSON(paste0(dnd_url, spells)) %>% 
+    enframe() %>% 
+    pivot_wider(names_from = name,
+                values_from = value)
+  
+  return(ret)
+}
+
+spell_df <- fromJSON(dnd_base)$results %>% 
+  pull(index)
+
+spell_list <- map(spell_df, fetch_spells) 
+
+spells_bind <- bind_rows(spell_list)
+
+glimpse(spells_bind)
 
 ```
 
