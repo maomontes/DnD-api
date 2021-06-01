@@ -31,5 +31,23 @@ my_content_from_json <- jsonlite::fromJSON(my_content)
 
 glimpse(my_content_from_json)
 
+my_content_from_json$proficiencies$index
+
+
+
+spells_raw <- paste0("https://www.dnd5eapi.co/api/spells/tongues")
+
+spells_get <- httr::GET(spells_raw)
+
+str(spells_get)
+
+spells_df <- httr::content(spells_get, as = 'text')
+
+str(spells_df)
+
+spells_df <- jsonlite::fromJSON(spells_df)
+
+glimpse(spells_df)
+
 ```
 
