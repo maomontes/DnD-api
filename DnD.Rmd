@@ -125,5 +125,24 @@ spells_bind <- bind_rows(spell_list)
 
 glimpse(spells_bind)
 
+
+compare_lens <- function(x, size = 1) {
+  all(map_lgl(x, ~length(unlist(.x)) == size))
+}
+
+cond_unlist <- function(x) {
+  if (compare_lens(x) == TRUE) {
+    unlist(x)
+  } else {
+    x
+  }
+}
+
+
+df_spell <- spells_bind %>% 
+  mutate(across(.cols = everything(), ~cond_unlist(x = .x)))
+
+
+glimpse(df_spell)
 ```
 
