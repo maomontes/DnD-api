@@ -1,0 +1,35 @@
+---
+title: "Dungeons and DragRacers"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(httr)
+library(jsonlite)
+library(tidyverse)
+library(scales)
+library(lubridate)
+
+
+my_url <- paste0("https://www.dnd5eapi.co/api/classes/barbarian")
+
+my_raw <- httr::GET(my_url)
+
+str(my_raw)
+str(my_raw$content)
+
+my_content <- httr::content(my_raw, as = 'text')
+str(my_content)
+
+
+
+my_content_from_json <- jsonlite::fromJSON(my_content)
+
+glimpse(my_content_from_json)
+
+```
+
