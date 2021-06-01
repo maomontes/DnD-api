@@ -13,96 +13,12 @@ library(jsonlite)
 library(tidyverse)
 library(scales)
 
-
-
-my_url <- paste0("https://www.dnd5eapi.co/api/classes/barbarian")
-
-my_raw <- httr::GET(my_url)
-
-str(my_raw)
-str(my_raw$content)
-
-my_content <- httr::content(my_raw, as = 'text')
-str(my_content)
+theme_set(theme_minimal())
 
 
 
-my_content_from_json <- jsonlite::fromJSON(my_content)
+#Spells-------------------------------------------------------------------
 
-glimpse(my_content_from_json)
-
-my_content_from_json$proficiencies$index
-
-
-
-spells_raw <- paste0("https://www.dnd5eapi.co/api/spells/tongues")
-
-spells_get <- httr::GET(spells_raw)
-
-str(spells_get)
-
-spells_df <- httr::content(spells_get, as = 'text')
-
-str(spells_df)
-
-spells_df <- jsonlite::fromJSON(spells_df)
-
-glimpse(spells_df)
-
-```
-
-
-
-```{r}
-
-monsters_raw <- paste0("https://www.dnd5eapi.co/api/monsters")
-
-monsters_get <- httr::GET(monsters_raw)
-
-str(monsters_get)
-
-monsters_content <- httr::content(monsters_get, as = "text")
-
-str(monsters_content)
-
-monster_json <- jsonlite::fromJSON(monsters_content, flatten = TRUE)
-
-glimpse(monster_json)
-
-monster_json$results$name
-
-
-
-
-
-
-
-
-
-
-mari_raw <- paste0("https://www.dnd5eapi.co/api/monsters/marilith")
-
-mari_get <- httr::GET(mari_raw)
-
-str(mari_get)
-
-mari_content <- httr::content(mari_get, as = "text")
-
-str(mari_content)
-
-mari_json <- jsonlite::fromJSON(mari_content, flatten = TRUE)
-
-glimpse(mari_json)
-
-
-mari_json$damage_resistances
-
-```
-
-#Spells----------------------------------------------------------------------
-
-
-```{r}
 dnd_base <- "https://www.dnd5eapi.co/api/spells/"
 
 fetch_spells <- function(spells) {
@@ -123,7 +39,6 @@ spell_list <- map(spell_df, fetch_spells)
 
 spells_bind <- bind_rows(spell_list)
 
-glimpse(spells_bind)
 
 
 compare_lens <- function(x, size = 1) {
@@ -144,5 +59,14 @@ df_spell <- spells_bind %>%
 
 
 glimpse(df_spell)
+
+```
+
+
+```{r}
+df_spell %>% 
+  count(attack_type) %>% 
+  ggplot(aes(n, attack_type)) +
+  geom_col()
 ```
 
